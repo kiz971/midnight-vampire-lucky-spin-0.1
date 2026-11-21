@@ -27,7 +27,7 @@ h1{color:#c084fc;font-size:27px}
  #7e22ce 120deg 180deg,#dc2626 180deg 240deg,
  #7e22ce 240deg 300deg,#dc2626 300deg 360deg);
  position:relative;
- transition:transform 4s cubic-bezier(.12,.7,.12,1);
+ transition:transform 9s cubic-bezier(.12,.7,.12,1);
  box-shadow:0 0 25px #a855f7;
 }
 .wheel span{
@@ -66,10 +66,10 @@ button:disabled{opacity:.5}
 
 <div class="wheel" id="wheel">
  <span style="transform:rotate(30deg) translateY(-112px)">10</span>
- <span style="transform:rotate(90deg) translateY(-112px)">20</span>
+ <span style="transform:rotate(90deg) translateY(-112px)">0</span>
  <span style="transform:rotate(150deg) translateY(-112px)">50</span>
  <span style="transform:rotate(210deg) translateY(-112px)">5</span>
- <span style="transform:rotate(270deg) translateY(-112px)">30</span>
+ <span style="transform:rotate(270deg) translateY(-112px)">0</span>
  <span style="transform:rotate(330deg) translateY(-112px)">100</span>
  <div class="center">🐊</div>
 </div>
@@ -96,7 +96,7 @@ function spin(){
  document.getElementById("points").textContent=points;
  document.getElementById("spin").disabled=true;
 
- let prizes=[10,20,50,5,30,100];
+ let prizes=[10,0,50,5,0,100];
  let index=Math.floor(Math.random()*prizes.length);
  let prize=prizes[index];
 
