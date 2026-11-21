@@ -23,17 +23,9 @@ h1{color:#c084fc;font-size:27px}
  border-radius:50%;margin:auto;
  border:8px solid #d8b4fe;
  background:conic-gradient(
- #7e22ce 0deg 36deg,
- #dc2626 36deg 72deg,
- #7e22ce 72deg 108deg,
- #dc2626 108deg 144deg,
- #7e22ce 144deg 180deg,
- #dc2626 180deg 216deg,
- #7e22ce 216deg 252deg,
- #dc2626 252deg 288deg,
- #7e22ce 288deg 324deg,
- #dc2626 324deg 360deg
-);
+ #7e22ce 0deg 60deg,#dc2626 60deg 120deg,
+ #7e22ce 120deg 180deg,#dc2626 180deg 240deg,
+ #7e22ce 240deg 300deg,#dc2626 300deg 360deg);
  position:relative;
  transition:transform 4s cubic-bezier(.12,.7,.12,1);
  box-shadow:0 0 25px #a855f7;
@@ -70,27 +62,15 @@ button:disabled{opacity:.5}
  ⭐ YOUR POINTS: <b id="points">100</b>
 </div>
 
-<div style="
-background:#42204f;
-color:#facc15;
-padding:15px;
-border-radius:15px;
-margin:12px auto;
-max-width:300px;
-font-size:22px;
-font-weight:bold;">
-🎯 BET: 10 COINS
-</div>
-
 <div class="pointer">▼</div>
 
-
-<span style="transform:rotate(41.538deg) translateY(-112px)">10</span>
-<span style="transform:rotate(96.923deg) translateY(-112px)">0</span>
-<span style="transform:rotate(152.308deg) translateY(-112px)">50</span>
-<span style="transform:rotate(207.692deg) translateY(-112px)">5</span>
-<span style="transform:rotate(263.077deg) translateY(-112px)">0</span>
-<span style="transform:rotate(318.462deg) translateY(-112px)">100</span>
+<div class="wheel" id="wheel">
+ <span style="transform:rotate(30deg) translateY(-112px)">10</span>
+ <span style="transform:rotate(90deg) translateY(-112px)">20</span>
+ <span style="transform:rotate(150deg) translateY(-112px)">50</span>
+ <span style="transform:rotate(210deg) translateY(-112px)">5</span>
+ <span style="transform:rotate(270deg) translateY(-112px)">30</span>
+ <span style="transform:rotate(330deg) translateY(-112px)">100</span>
  <div class="center">🐊</div>
 </div>
 
@@ -100,111 +80,39 @@ font-weight:bold;">
 <p class="note">FREE DEMO GAME • VIRTUAL POINTS ONLY</p>
 <p class="note">POWERED BY:VISITACION</p>
 
-
 <script>
 let points=100;
 let rotation=0;
 let busy=false;
-let audio;
-let soundTimer;
-let tickCount=0;
-
-function tickSound(){
- if(!audio) return;
-
- let osc=audio.createOscillator();
- let gain=audio.createGain();
-
- osc.type="square";
- osc.frequency.value=900;
- gain.gain.value=0.045;
-
- osc.connect(gain);
- gain.connect(audio.destination);
-
- osc.start();
- osc.stop(audio.currentTime+0.035);
-}
-
-function winSound(){
- if(!audio) return;
-
- [523,659,784,1046].forEach((freq,i)=>{
-  let osc=audio.createOscillator();
-  let gain=audio.createGain();
-
-  osc.type="sine";
-  osc.frequency.value=freq;
-  gain.gain.setValueAtTime(0.12,audio.currentTime+i*0.13);
-  gain.gain.exponentialRampToValueAtTime(
-   0.001,audio.currentTime+i*0.13+0.35
-  );
-
-  osc.connect(gain);
-  gain.connect(audio.destination);
-  osc.start(audio.currentTime+i*0.13);
-  osc.stop(audio.currentTime+i*0.13+0.35);
- });
-}
 
 function spin(){
  if(busy)return;
-
  if(points<10){
-  document.getElementById("result").textContent="Not enough points!";
-  return;
+ document.getElementById("result").textContent="Not enough points!";
+ return;
  }
-
  busy=true;
  points-=10;
  document.getElementById("points").textContent=points;
  document.getElementById("spin").disabled=true;
 
- if(!audio){
-  audio=new (window.AudioContext||window.webkitAudioContext)();
- }
- audio.resume();
-
- let prizes=[10,0,50,5,0,100];
+ let prizes=[10,20,50,5,30,100];
  let index=Math.floor(Math.random()*prizes.length);
  let prize=prizes[index];
 
  rotation+=1440+(360-index*60-30+360)%360;
-
  document.getElementById("wheel").style.transform=
  "rotate("+rotation+"deg)";
 
- let start=Date.now();
- let duration=4000;
-
- function playTicks(){
-  let elapsed=Date.now()-start;
-  if(elapsed>=duration)return;
-
-  tickSound();
-
-  let progress=elapsed/duration;
-  let delay=65+progress*260;
-
-  soundTimer=setTimeout(playTicks,delay);
- }
-
- playTicks();
-
  setTimeout(()=>{
-  clearTimeout(soundTimer);
-  winSound();
-
-  points+=prize;
-  document.getElementById("points").textContent=points;
-  document.getElementById("result").textContent=
-  "🐊 YOU WON "+prize+" POINTS!";
-
-  document.getElementById("spin").disabled=false;
-  busy=false;
+ points+=prize;
+ document.getElementById("points").textContent=points;
+ document.getElementById("result").textContent=
+ "🐊 YOU WON "+prize+" POINTS!";
+ document.getElementById("spin").disabled=false;
+ busy=false;
  },4100);
 }
 </script>
-
 </body>
 </html>
